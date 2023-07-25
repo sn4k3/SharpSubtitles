@@ -1,13 +1,18 @@
 <Project>
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<Authors>Tiago Conceição; sn4k3</Authors>
 		<Company>PTRTECH</Company>
 		<Copyright>Copyright 2023-$([System.DateTime]::Now.ToString(`yyyy`)) © PTRTECH</Copyright>
 		<Version>0.0.1</Version>
 
+		
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+		<RepositoryUrl>https://github.com/sn4k3/SharpSubtitles</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/sn4k3/SharpSubtitles</PackageProjectUrl>
+		<PackageReleaseNotes>https://github.com/sn4k3/SharpSubtitles/releases</PackageReleaseNotes>
+		<PackageTags>subtitles, opensubtitles</PackageTags>
 		<RepositoryType>Git</RepositoryType>
 
 		<Nullable>enable</Nullable>

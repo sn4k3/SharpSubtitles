@@ -1,0 +1,22 @@
+<Project>
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<Authors>Tiago Conceição; sn4k3</Authors>
+		<Company>PTRTECH</Company>
+		<Copyright>Copyright 2023-$([System.DateTime]::Now.ToString(`yyyy`)) © PTRTECH</Copyright>
+		<Version>0.0.1</Version>
+
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+		<RepositoryType>Git</RepositoryType>
+
+		<Nullable>enable</Nullable>
+
+		<SignAssembly>True</SignAssembly>
+		<AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)build\SharpSubtitles.snk</AssemblyOriginatorKeyFile>
+
+		<PathMap>$(MSBuildProjectDirectory)=$(MSBuildProjectName)</PathMap>
+
+		<AvaloniaVersion>11.0.0</AvaloniaVersion>
+	</PropertyGroup>
+</Project>

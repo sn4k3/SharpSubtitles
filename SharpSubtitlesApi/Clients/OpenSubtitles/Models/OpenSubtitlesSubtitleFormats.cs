@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Text.Json.Serialization;
 
 namespace SharpSubtitlesApi.Clients.OpenSubtitles.Models;
@@ -9,6 +9,11 @@ namespace SharpSubtitlesApi.Clients.OpenSubtitles.Models;
 /// </summary>
 public class OpenSubtitlesSubtitleFormats
 {
-    [JsonPropertyName("output_formats")]
-    public List<string>? OutputFormats { get; set; }
+    [JsonPropertyName("output_formats")] 
+    public string[] OutputFormats { get; set; } = Array.Empty<string>();
+
+    public override string ToString()
+    {
+        return $"{nameof(OutputFormats)}: {string.Join(", ", OutputFormats)}";
+    }
 }

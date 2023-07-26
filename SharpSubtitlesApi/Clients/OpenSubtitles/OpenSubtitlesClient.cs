@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
 using SharpSubtitlesApi.Clients.OpenSubtitles.Models;
@@ -151,18 +152,175 @@ public class OpenSubtitlesClient : BaseClient
     /// Gets the subtitle formats<br/>
     /// https://opensubtitles.stoplight.io/docs/opensubtitles-api/69b286fc7506e-subtitle-formats
     /// </summary>
-    public Task<OpenSubtitlesResultData<OpenSubtitlesSubtitleFormats>?> GetSubtitleFormatsAsync()
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    public Task<OpenSubtitlesResultData<OpenSubtitlesSubtitleFormats>?> GetSubtitleFormatsAsync(CancellationToken token = default)
     {
-        return GetJsonAsync<OpenSubtitlesResultData<OpenSubtitlesSubtitleFormats>>("infos/formats");
+        return GetJsonAsync<OpenSubtitlesResultData<OpenSubtitlesSubtitleFormats>>("infos/formats", token);
     }
 
     /// <summary>
     /// Get the languages table containing the codes and names used through the API<br/>
     /// https://opensubtitles.stoplight.io/docs/opensubtitles-api/1de776d20e873-languages
     /// </summary>
-    public Task<List<OpenSubtitlesLanguage>?> GetLanguagesAsync()
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    public Task<OpenSubtitlesLanguage[]?> GetLanguagesAsync(CancellationToken token = default)
     {
-        return GetJsonAsync<List<OpenSubtitlesLanguage>>("infos/languages");
+        return GetJsonAsync<OpenSubtitlesLanguage[]>("infos/languages", token);
     }
+
+    /// <summary>
+    /// Get the languages table containing the codes and names used through the API<br/>
+    /// https://opensubtitles.stoplight.io/docs/opensubtitles-api/ea912bb244ef0-user-informations
+    /// </summary>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    public Task<OpenSubtitlesResultData<OpenSubtitlesUserInformation>?> GetUserInformationAsync(CancellationToken token = default)
+    {
+        return GetJsonAsync<OpenSubtitlesResultData<OpenSubtitlesUserInformation>>("infos/user", token);
+    }
+
+    /// <summary>
+    /// Create a token to authenticate a user.<br/>
+    /// https://opensubtitles.stoplight.io/docs/opensubtitles-api/73acf79accc0a-login
+    /// </summary>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    public Task<OpenSubtitlesLogin?> LoginAsync(OpenSubtitlesPostUserLogin data, CancellationToken token = default)
+    {
+        return PostJsonAsync<OpenSubtitlesLogin>("login", data, token);
+    }
+
+    /// <summary>
+    /// Create a token to authenticate a user.<br/>
+    /// https://opensubtitles.stoplight.io/docs/opensubtitles-api/73acf79accc0a-login
+    /// </summary>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    public Task<OpenSubtitlesLogin?> LoginAsync(string username, string password, CancellationToken token = default)
+    {
+        return LoginAsync(new OpenSubtitlesPostUserLogin(username, password), token);
+    }
+
+    /// <summary>
+    /// Destroy a user token to end a session. Bearer token is required for this endpoint.<br/>
+    /// https://opensubtitles.stoplight.io/docs/opensubtitles-api/9fe4d6d078e50-logout
+    /// </summary>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    public Task<OpenSubtitlesLogout?> LogoutAsync(CancellationToken token = default)
+    {
+        return DeleteJsonAsync<OpenSubtitlesLogout>("logout", token);
+    }
+
+    /// <summary>
+    /// Discover popular features on opensubtitles.com, according to last 30 days downloads.<br/>
+    /// https://opensubtitles.stoplight.io/docs/opensubtitles-api/6d285998026d0-popular-features
+    /// </summary>
+    /// <param name="token"></param>
+    /// <param name="type">The type (movie or tvshow).</param>
+    /// <param name="languages">The language codes (en,fr) or all.</param>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    public Task<OpenSubtitlesResultData<OpenSubtitlesPopularFeatures[]>?> GetPopularFeaturesAsync(CancellationToken token = default, OpenSubtitlesMovieTypes type = default, params string[] languages)
+    {
+        var parameters = new Dictionary<string, object>();
+
+        if (languages.Length > 0)
+        {
+            parameters.Add("languages", string.Join(',', languages));
+        }
+
+        parameters.Add("type", type.ToString().ToLowerInvariant());
+
+        return GetJsonAsync<OpenSubtitlesResultData<OpenSubtitlesPopularFeatures[]>>("discover/popular", parameters, token);
+    }
+
+    /// <summary>
+    /// Discover popular features on opensubtitles.com, according to last 30 days downloads.<br/>
+    /// https://opensubtitles.stoplight.io/docs/opensubtitles-api/6d285998026d0-popular-features
+    /// </summary>
+    /// <param name="type">The type (movie or tvshow).</param>
+    /// <param name="languages">The language codes (en,fr) or all.</param>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    public Task<OpenSubtitlesResultData<OpenSubtitlesPopularFeatures[]>?> GetPopularFeaturesAsync(OpenSubtitlesMovieTypes type, params string[] languages) => GetPopularFeaturesAsync(default, type, languages);
+
+    /// <summary>
+    /// Lists 60 latest uploaded subtitles<br/>
+    /// https://opensubtitles.stoplight.io/docs/opensubtitles-api/6d285998026d0-popular-features
+    /// </summary>
+    /// <param name="token"></param>
+    /// <param name="type">The type (movie or tvshow).</param>
+    /// <param name="languages">The language codes (en,fr) or all.</param>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    public Task<OpenSubtitlesLatestSubtitles?> GetLatestSubtitlesAsync(CancellationToken token = default, OpenSubtitlesMovieTypes type = default, params string[] languages)
+    {
+        var parameters = new Dictionary<string, object>();
+
+        if (languages.Length > 0)
+        {
+            parameters.Add("languages", string.Join(',', languages));
+        }
+
+        parameters.Add("type", type.ToString().ToLowerInvariant());
+
+        return GetJsonAsync<OpenSubtitlesLatestSubtitles>("discover/latest", parameters, token);
+    }
+
+    /// <summary>
+    /// Lists 60 latest uploaded subtitles<br/>
+    /// https://opensubtitles.stoplight.io/docs/opensubtitles-api/6d285998026d0-popular-features
+    /// </summary>
+    /// <param name="type">The type (movie or tvshow).</param>
+    /// <param name="languages">The language codes (en,fr) or all.</param>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    public Task<OpenSubtitlesLatestSubtitles?> GetLatestSubtitlesAsync(OpenSubtitlesMovieTypes type, params string[] languages) => GetLatestSubtitlesAsync(default, type, languages);
+
+    /// <summary>
+    /// Discover popular subtitles, according to last 30 days downloads on opensubtitles.com. This list can be filtered by language code or feature type (movie, episode).<br/>
+    /// https://opensubtitles.stoplight.io/docs/opensubtitles-api/3a149b956fcab-most-downloaded-subtitles
+    /// </summary>
+    /// <param name="token"></param>
+    /// <param name="type">The type (movie or tvshow).</param>
+    /// <param name="languages">The language codes (en,fr) or all.</param>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    public Task<OpenSubtitlesMostDownloadedSubtitles?> GetMostDownloadedSubtitlesAsync(CancellationToken token = default, OpenSubtitlesEpisodeTypes type = default, params string[] languages)
+    {
+        var parameters = new Dictionary<string, object>();
+
+        if (languages.Length > 0)
+        {
+            parameters.Add("languages", string.Join(',', languages));
+        }
+
+        parameters.Add("type", type.ToString().ToLowerInvariant());
+
+        return GetJsonAsync<OpenSubtitlesMostDownloadedSubtitles>("discover/most_downloaded", parameters, token);
+    }
+
+    /// <summary>
+    /// Discover popular subtitles, according to last 30 days downloads on opensubtitles.com. This list can be filtered by language code or feature type (movie, episode).<br/>
+    /// https://opensubtitles.stoplight.io/docs/opensubtitles-api/3a149b956fcab-most-downloaded-subtitles
+    /// </summary>
+    /// <param name="type">The type (movie or tvshow).</param>
+    /// <param name="languages">The language codes (en,fr) or all.</param>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    public Task<OpenSubtitlesMostDownloadedSubtitles?> GetMostDownloadedSubtitlesAsync(OpenSubtitlesEpisodeTypes type, params string[] languages) => GetMostDownloadedSubtitlesAsync(default, type, languages);
+
+
+    /// <summary>
+    /// Request a download url for a subtitle. Subtitle file in temporary URL will be always in UTF-8 encoding.<br/>
+    /// https://opensubtitles.stoplight.io/docs/opensubtitles-api/6be7f6ae2d918-download
+    /// </summary>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    public Task<OpenSubtitlesDownload?> DownloadAsync(OpenSubtitlesPostDownload data, CancellationToken token = default)
+    {
+        return PostJsonAsync<OpenSubtitlesDownload>("download", data, token);
+    }
+
+    /// <summary>
+    /// Request a download url for a subtitle. Subtitle file in temporary URL will be always in UTF-8 encoding.<br/>
+    /// https://opensubtitles.stoplight.io/docs/opensubtitles-api/6be7f6ae2d918-download
+    /// </summary>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    public Task<OpenSubtitlesDownload?> DownloadAsync(int fileId, CancellationToken token = default)
+    {
+        return DownloadAsync(new OpenSubtitlesPostDownload(fileId), token);
+    }
+
     #endregion
 }

@@ -194,7 +194,7 @@ public class BaseClient : BindableBase
     }
 
     /// <summary>
-    /// Sens a request to the Api
+    /// Sends a request to the Api
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="request"></param>
@@ -209,5 +209,6 @@ public class BaseClient : BindableBase
         
         return await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken).ConfigureAwait(false);
     }
+
     #endregion
 }

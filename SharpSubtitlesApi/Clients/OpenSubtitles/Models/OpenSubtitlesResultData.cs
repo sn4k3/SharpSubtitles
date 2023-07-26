@@ -6,4 +6,9 @@ public class OpenSubtitlesResultData<T> where T : class
 {
     [JsonPropertyName("data")]
     public T? Data { get; set; }
+
+    public override string ToString()
+    {
+        return $"{nameof(Data)}: {Data}";
+    }
 }

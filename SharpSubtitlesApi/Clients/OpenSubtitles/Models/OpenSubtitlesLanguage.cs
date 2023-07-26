@@ -13,4 +13,9 @@ public class OpenSubtitlesLanguage
 
     [JsonPropertyName("language_name")]
     public string? LanguageName { get; set; }
+
+    public override string ToString()
+    {
+        return $"{nameof(LanguageCode)}: {LanguageCode}, {nameof(LanguageName)}: {LanguageName}";
+    }
 }

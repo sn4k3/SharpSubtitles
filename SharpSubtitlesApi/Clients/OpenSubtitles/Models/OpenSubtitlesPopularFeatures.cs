@@ -15,7 +15,7 @@ public class OpenSubtitlesPopularFeatures
 
     [JsonPropertyName("type")]
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    public OpenSubtitlesMovieTypes Type { get; set; }
+    public OpenSubtitlesMovieType Type { get; set; }
 
     [JsonPropertyName("attributes")]
     public OpenSubtitlesPopularFeaturesAttributes Attributes { get; set; } = new();

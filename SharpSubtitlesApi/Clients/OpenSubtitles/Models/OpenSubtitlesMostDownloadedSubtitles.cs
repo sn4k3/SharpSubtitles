@@ -7,7 +7,7 @@ namespace SharpSubtitlesApi.Clients.OpenSubtitles.Models;
 /// Discover popular subtitles, according to last 30 days downloads on opensubtitles.com. This list can be filtered by language code or feature type (movie, episode).<br/>
 /// https://opensubtitles.stoplight.io/docs/opensubtitles-api/3a149b956fcab-most-downloaded-subtitles
 /// </summary>
-public class OpenSubtitlesMostDownloadedSubtitles
+public class OpenSubtitlesMostDownloadedSubtitles : OpenSubtitlesBaseModel
 {
     [JsonPropertyName("total_pages")]
     public int TotalPages { get; set; }

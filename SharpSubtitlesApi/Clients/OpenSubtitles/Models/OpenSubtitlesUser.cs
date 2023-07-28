@@ -5,7 +5,7 @@ namespace SharpSubtitlesApi.Clients.OpenSubtitles.Models;
 /// <summary>
 /// https://opensubtitles.stoplight.io/docs/opensubtitles-api/73acf79accc0a-login
 /// </summary>
-public class OpenSubtitlesUser
+public class OpenSubtitlesUser : OpenSubtitlesBaseModel
 {
     [JsonPropertyName("allowed_downloads")]
     public int AllowedDownloads { get; set; }

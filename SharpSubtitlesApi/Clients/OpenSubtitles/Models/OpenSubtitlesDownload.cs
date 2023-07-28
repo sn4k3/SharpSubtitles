@@ -7,7 +7,7 @@ namespace SharpSubtitlesApi.Clients.OpenSubtitles.Models;
 /// Request a download url for a subtitle. Subtitle file in temporary URL will be always in UTF-8 encoding.<br/>
 /// https://opensubtitles.stoplight.io/docs/opensubtitles-api/6be7f6ae2d918-download
 /// </summary>
-public class OpenSubtitlesDownload
+public class OpenSubtitlesDownload : OpenSubtitlesBaseModel
 {
     [JsonPropertyName("link")]
     public Uri? Link { get; set; }

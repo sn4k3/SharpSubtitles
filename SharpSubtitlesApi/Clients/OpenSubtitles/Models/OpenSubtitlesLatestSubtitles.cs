@@ -7,7 +7,7 @@ namespace SharpSubtitlesApi.Clients.OpenSubtitles.Models;
 /// Lists 60 latest uploaded subtitles<br/>
 /// https://opensubtitles.stoplight.io/docs/opensubtitles-api/f36cef28efaa9-latest-subtitles
 /// </summary>
-public class OpenSubtitlesLatestSubtitles
+public class OpenSubtitlesLatestSubtitles : OpenSubtitlesBaseModel
 {
     [JsonPropertyName("total_pages")]
     public int TotalPages { get; set; }
